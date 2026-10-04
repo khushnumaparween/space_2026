@@ -1,0 +1,949 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Asteroids | Space2026</title>
+
+    <style>
+
+        html,
+body {
+    background: #160f18 !important;
+    color: #f8eef2;
+}
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Playfair+Display:wght@500;600&display=swap');
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: #160f18;
+            color: #f8eef2;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+
+        /* =========================
+           STAR BACKGROUND
+        ========================= */
+
+        body::before {
+            content: "";
+
+            position: fixed;
+            inset: 0;
+
+            background-image:
+                    radial-gradient(
+                            circle,
+                            rgba(255,255,255,0.7) 1px,
+                            transparent 1px
+                    ),
+                    radial-gradient(
+                            circle,
+                            rgba(240,184,202,0.4) 1px,
+                            transparent 1px
+                    );
+
+            background-size: 100px 100px, 170px 170px;
+            background-position: 15px 25px, 70px 90px;
+
+            opacity: 0.14;
+
+            pointer-events: none;
+            z-index: -2;
+        }
+
+
+        /* =========================
+           SOFT GLOW
+        ========================= */
+
+        body::after {
+            content: "";
+
+            position: fixed;
+
+            width: 480px;
+            height: 480px;
+
+            background: rgba(216,139,165,0.09);
+
+            filter: blur(130px);
+
+            border-radius: 50%;
+
+            top: -200px;
+            right: -150px;
+
+            pointer-events: none;
+
+            z-index: -1;
+        }
+
+
+        /* =========================
+           NAVBAR
+        ========================= */
+
+        nav {
+            width: 86%;
+            max-width: 1100px;
+
+            height: 82px;
+
+            margin: auto;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            border-bottom: 1px solid rgba(233,184,200,0.12);
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+
+            font-size: 25px;
+
+            color: #f0b8ca;
+
+            letter-spacing: 0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+
+            gap: 28px;
+        }
+
+        .nav-links a {
+            color: #b9a9b1;
+
+            text-decoration: none;
+
+            font-size: 14px;
+
+            transition: 0.2s ease;
+        }
+
+        .nav-links a:hover {
+            color: #f0b8ca;
+        }
+
+
+        /* =========================
+           CONTAINER
+        ========================= */
+
+        .container {
+            width: 86%;
+            max-width: 1100px;
+
+            margin: 70px auto 80px;
+        }
+
+
+        /* =========================
+           HEADING
+        ========================= */
+
+        .eyebrow {
+            color: #d88ba5;
+
+            font-size: 11px;
+
+            letter-spacing: 3px;
+
+            text-transform: uppercase;
+
+            margin-bottom: 16px;
+        }
+
+        .heading h1 {
+            font-family: 'Playfair Display', serif;
+
+            font-size: clamp(42px, 6vw, 64px);
+
+            font-weight: 500;
+
+            line-height: 1.1;
+
+            margin-bottom: 15px;
+        }
+
+        .heading p {
+            color: #a99aa2;
+
+            font-size: 15px;
+
+            line-height: 1.7;
+
+            max-width: 650px;
+        }
+
+
+        /* =========================
+           SEARCH BOX
+        ========================= */
+
+        .search-box {
+            margin-top: 42px;
+
+            margin-bottom: 42px;
+
+            padding: 25px;
+
+            background: #211620;
+
+            border: 1px solid rgba(233,184,200,0.12);
+
+            border-radius: 5px;
+        }
+
+        form {
+            display: flex;
+
+            gap: 18px;
+
+            flex-wrap: wrap;
+
+            align-items: end;
+        }
+
+        .field {
+            display: flex;
+
+            flex-direction: column;
+
+            gap: 8px;
+        }
+
+        label {
+            color: #a99aa2;
+
+            font-size: 12px;
+
+            letter-spacing: 0.5px;
+        }
+
+        input {
+            padding: 11px 13px;
+
+            min-width: 170px;
+
+            border-radius: 3px;
+
+            border: 1px solid rgba(233,184,200,0.18);
+
+            background: #160f18;
+
+            color: #f8eef2;
+
+            font-family: 'DM Sans', sans-serif;
+
+            outline: none;
+        }
+
+        input:focus {
+            border-color: rgba(216,139,165,0.6);
+        }
+
+        input::-webkit-calendar-picker-indicator {
+            filter: invert(1);
+            opacity: 0.6;
+        }
+
+        button {
+            padding: 12px 20px;
+
+            border: none;
+
+            border-radius: 3px;
+
+            background: #d88ba5;
+
+            color: #21141a;
+
+            font-family: 'DM Sans', sans-serif;
+
+            font-size: 13px;
+
+            font-weight: 600;
+
+            cursor: pointer;
+
+            transition: 0.2s ease;
+        }
+
+        button:hover {
+            background: #e2a2b9;
+
+            transform: translateY(-1px);
+        }
+
+
+        /* =========================
+           RESULTS HEADER
+        ========================= */
+
+        .results-header {
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            margin-bottom: 22px;
+
+            padding-bottom: 15px;
+
+            border-bottom: 1px solid rgba(233,184,200,0.10);
+        }
+
+        .results-header h2 {
+            font-family: 'Playfair Display', serif;
+
+            font-size: 26px;
+
+            font-weight: 500;
+        }
+
+        .results-header span {
+            color: #81727a;
+
+            font-size: 12px;
+        }
+
+
+        /* =========================
+           ASTEROID GRID
+        ========================= */
+
+        .grid {
+            display: grid;
+
+            grid-template-columns:
+                    repeat(auto-fit, minmax(300px, 1fr));
+
+            gap: 18px;
+        }
+
+
+        /* =========================
+           ASTEROID CARD
+        ========================= */
+
+        .card {
+            position: relative;
+
+            padding: 25px;
+
+            background: #211620;
+
+            border: 1px solid rgba(233,184,200,0.11);
+
+            border-radius: 5px;
+
+            overflow: hidden;
+
+            transition:
+                    transform 0.25s ease,
+                    border-color 0.25s ease,
+                    background 0.25s ease;
+        }
+
+        .card::after {
+            content: "";
+
+            position: absolute;
+
+            width: 140px;
+            height: 140px;
+
+            border-radius: 50%;
+
+            background: rgba(216,139,165,0.07);
+
+            filter: blur(50px);
+
+            right: -70px;
+            top: -70px;
+
+            pointer-events: none;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+
+            border-color: rgba(233,184,200,0.28);
+
+            background: #271b23;
+        }
+
+
+        /* =========================
+           CARD HEADER
+        ========================= */
+
+        .card-header {
+            display: flex;
+
+            align-items: flex-start;
+
+            justify-content: space-between;
+
+            gap: 15px;
+
+            margin-bottom: 7px;
+        }
+
+        .card h2 {
+            font-family: 'Playfair Display', serif;
+
+            font-size: 21px;
+
+            font-weight: 500;
+
+            color: #f5e8ed;
+        }
+
+        .asteroid-symbol {
+            font-size: 22px;
+
+            opacity: 0.8;
+        }
+
+        .id {
+            color: #756770;
+
+            font-size: 11px;
+
+            margin-bottom: 24px;
+        }
+
+
+        /* =========================
+           INFO ROWS
+        ========================= */
+
+        .info {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            gap: 15px;
+
+            padding: 13px 0;
+
+            border-top: 1px solid rgba(233,184,200,0.08);
+        }
+
+        .label {
+            color: #8f7f87;
+
+            font-size: 12px;
+        }
+
+        .value {
+            color: #e4d7dc;
+
+            font-size: 13px;
+
+            text-align: right;
+        }
+
+
+        /* =========================
+           HAZARD STATUS
+        ========================= */
+
+        .hazard {
+            color: #e2a2a2;
+
+            font-weight: 600;
+        }
+
+        .safe {
+            color: #a9c9ae;
+
+            font-weight: 600;
+        }
+
+
+        /* =========================
+           EMPTY STATE
+        ========================= */
+
+        .empty {
+            text-align: center;
+
+            padding: 70px 20px;
+
+            color: #8f7f87;
+
+            border-top: 1px solid rgba(233,184,200,0.10);
+
+            border-bottom: 1px solid rgba(233,184,200,0.10);
+        }
+
+        .empty-symbol {
+            font-size: 35px;
+
+            margin-bottom: 15px;
+        }
+
+        .empty p {
+            font-size: 14px;
+        }
+
+
+        /* =========================
+           BACK LINK
+        ========================= */
+
+        .back {
+            display: inline-block;
+
+            margin-top: 45px;
+
+            color: #d88ba5;
+
+            text-decoration: none;
+
+            font-size: 13px;
+
+            transition: 0.2s ease;
+        }
+
+        .back:hover {
+            color: #f0b8ca;
+        }
+
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        footer {
+            width: 86%;
+            max-width: 1100px;
+
+            margin: 0 auto 30px;
+
+            padding-top: 25px;
+
+            border-top: 1px solid rgba(233,184,200,0.10);
+
+            color: #71636b;
+
+            font-size: 12px;
+        }
+
+        footer span {
+            color: #d88ba5;
+        }
+
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 800px) {
+
+            nav {
+                width: 88%;
+            }
+
+            .nav-links {
+                display: none;
+            }
+
+            .container {
+                width: 88%;
+
+                margin-top: 50px;
+            }
+
+            .search-box {
+                padding: 20px;
+            }
+
+            form {
+                flex-direction: column;
+
+                align-items: stretch;
+            }
+
+            .field {
+                width: 100%;
+            }
+
+            input {
+                width: 100%;
+            }
+
+            button {
+                width: 100%;
+            }
+
+            .results-header {
+                align-items: flex-start;
+
+                flex-direction: column;
+
+                gap: 6px;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     NAVIGATION
+========================= -->
+
+<nav>
+
+    <div class="logo">
+        Space2026
+    </div>
+
+    <div class="nav-links">
+
+        <a href="/">
+            Home
+        </a>
+
+        <a href="/apod">
+            APOD
+        </a>
+
+        <a href="/asteroids">
+            Asteroids
+        </a>
+
+        <a href="/images">
+            NASA Images
+        </a>
+
+        <a href="/solar-flares">
+            Solar Activity
+        </a>
+
+    </div>
+
+</nav>
+
+
+<!-- =========================
+     MAIN CONTENT
+========================= -->
+
+<div class="container">
+
+
+    <!-- HEADING -->
+
+    <div class="heading">
+
+        <div class="eyebrow">
+            Near-Earth Object Tracking
+        </div>
+
+        <h1>
+            Near-Earth Asteroids
+        </h1>
+
+        <p>
+            Explore asteroids approaching Earth during a selected
+            date range, including their size, velocity, distance
+            and potential hazard status.
+        </p>
+
+    </div>
+
+
+    <!-- SEARCH -->
+
+    <div class="search-box">
+
+        <form action="/asteroids"
+              method="get">
+
+            <div class="field">
+
+                <label for="startDate">
+                    Start Date
+                </label>
+
+                <input
+                        type="date"
+                        id="startDate"
+                        name="startDate"
+                        th:value="${startDate}"
+                        required
+                >
+
+            </div>
+
+
+            <div class="field">
+
+                <label for="endDate">
+                    End Date
+                </label>
+
+                <input
+                        type="date"
+                        id="endDate"
+                        name="endDate"
+                        th:value="${endDate}"
+                        required
+                >
+
+            </div>
+
+
+            <button type="submit">
+                Search Asteroids →
+            </button>
+
+        </form>
+
+    </div>
+
+
+    <!-- RESULTS -->
+
+    <div th:if="${!asteroids.isEmpty()}">
+
+        <div class="results-header">
+
+            <h2>
+                Objects Found
+            </h2>
+
+            <span>
+                Showing results for the selected dates
+            </span>
+
+        </div>
+
+
+        <div class="grid">
+
+            <div class="card"
+                 th:each="asteroid : ${asteroids}">
+
+
+                <div class="card-header">
+
+                    <h2 th:text="${asteroid.name}">
+                        Asteroid Name
+                    </h2>
+
+                    <div class="asteroid-symbol">
+                        ☄️
+                    </div>
+
+                </div>
+
+
+                <div class="id">
+
+                    NASA ID:
+                    <span th:text="${asteroid.id}">
+                        12345
+                    </span>
+
+                </div>
+
+
+                <!-- HAZARD -->
+
+                <div class="info">
+
+                    <div class="label">
+                        Potentially Hazardous
+                    </div>
+
+                    <div class="value"
+                         th:classappend="${asteroid.potentiallyHazardous == true}
+                                         ? 'hazard'
+                                         : 'safe'"
+                         th:text="${asteroid.potentiallyHazardous == true
+                                         ? 'YES'
+                                         : 'NO'}">
+
+                        NO
+
+                    </div>
+
+                </div>
+
+
+                <!-- DIAMETER -->
+
+                <div class="info">
+
+                    <div class="label">
+                        Diameter
+                    </div>
+
+                    <div class="value">
+
+                        <span th:text="${asteroid.diameterMinKm}">
+                            0
+                        </span>
+
+                        km –
+
+                        <span th:text="${asteroid.diameterMaxKm}">
+                            0
+                        </span>
+
+                        km
+
+                    </div>
+
+                </div>
+
+
+                <!-- CLOSE APPROACH -->
+
+                <div class="info">
+
+                    <div class="label">
+                        Close Approach
+                    </div>
+
+                    <div class="value"
+                         th:text="${asteroid.closeApproachDate}">
+                        2026-10-01
+                    </div>
+
+                </div>
+
+
+                <!-- VELOCITY -->
+
+                <div class="info">
+
+                    <div class="label">
+                        Velocity
+                    </div>
+
+                    <div class="value">
+
+                        <span th:text="${asteroid.velocityKmPerHour}">
+                            0
+                        </span>
+
+                        km/h
+
+                    </div>
+
+                </div>
+
+
+                <!-- MISS DISTANCE -->
+
+                <div class="info">
+
+                    <div class="label">
+                        Miss Distance
+                    </div>
+
+                    <div class="value">
+
+                        <span th:text="${asteroid.missDistanceKm}">
+                            0
+                        </span>
+
+                        km
+
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- EMPTY -->
+
+    <div class="empty"
+         th:if="${asteroids.isEmpty()}">
+
+        <div class="empty-symbol">
+            ☄️
+        </div>
+
+        <p>
+            No asteroids found for this date range.
+        </p>
+
+    </div>
+
+
+    <!-- BACK -->
+
+    <a class="back"
+       href="/">
+
+        ← Back to Space2026
+
+    </a>
+
+
+</div>
+
+
+<!-- =========================
+     FOOTER
+========================= -->
+
+<footer>
+
+    Space2026 · Built with
+    <span>Spring Boot</span>
+    +
+    <span>Thymeleaf</span>
+    · Powered by NASA data
+
+</footer>
+
+
+</body>
+
+</html>

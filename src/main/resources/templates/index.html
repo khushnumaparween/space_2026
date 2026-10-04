@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Space2026 | Explore the Universe</title>
+
+    <style>
+
+        html,
+body {
+    background: #160f18 !important;
+    color: #f8eef2;
+}
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'DM Sans', Arial, sans-serif;
+            background: #160f18;
+            color: #f8eef2;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* =========================
+           FONTS
+        ========================= */
+
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Playfair+Display:wght@500;600&display=swap');
+
+
+        /* =========================
+           STAR BACKGROUND
+        ========================= */
+
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+
+            background-image:
+                    radial-gradient(
+                            circle,
+                            rgba(255,255,255,0.7) 1px,
+                            transparent 1px
+                    ),
+                    radial-gradient(
+                            circle,
+                            rgba(240,184,202,0.45) 1px,
+                            transparent 1px
+                    );
+
+            background-size: 100px 100px, 170px 170px;
+            background-position: 15px 25px, 70px 90px;
+
+            opacity: 0.16;
+
+            pointer-events: none;
+            z-index: -2;
+        }
+
+
+        /* =========================
+           SOFT PINK GLOW
+        ========================= */
+
+        body::after {
+            content: "";
+
+            position: fixed;
+
+            width: 500px;
+            height: 500px;
+
+            background: rgba(216, 139, 165, 0.10);
+
+            filter: blur(130px);
+
+            border-radius: 50%;
+
+            top: -220px;
+            right: -170px;
+
+            pointer-events: none;
+
+            z-index: -1;
+        }
+
+
+        /* =========================
+           CONTAINER
+        ========================= */
+
+        .container {
+            width: 86%;
+            max-width: 1100px;
+            margin: auto;
+        }
+
+
+        /* =========================
+           NAVBAR
+        ========================= */
+
+        nav {
+            height: 82px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            border-bottom: 1px solid rgba(233,184,200,0.12);
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+
+            font-size: 25px;
+
+            color: #f0b8ca;
+
+            letter-spacing: 0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 28px;
+        }
+
+        .nav-links a {
+            color: #b9a9b1;
+
+            text-decoration: none;
+
+            font-size: 14px;
+
+            transition: 0.2s ease;
+        }
+
+        .nav-links a:hover {
+            color: #f0b8ca;
+        }
+
+
+        /* =========================
+           HERO
+        ========================= */
+
+        .hero {
+            text-align: center;
+
+            padding: 115px 20px 105px;
+        }
+
+        .eyebrow {
+            color: #d88ba5;
+
+            font-size: 12px;
+
+            letter-spacing: 3px;
+
+            text-transform: uppercase;
+
+            margin-bottom: 22px;
+        }
+
+        .hero h1 {
+            font-family: 'Playfair Display', serif;
+
+            font-size: clamp(48px, 7vw, 82px);
+
+            line-height: 1.05;
+
+            font-weight: 500;
+
+            margin-bottom: 27px;
+        }
+
+        .hero h1 span {
+            color: #e2a2b9;
+        }
+
+        .hero p {
+            max-width: 680px;
+
+            margin: auto;
+
+            color: #b9a9b1;
+
+            font-size: 17px;
+
+            line-height: 1.8;
+        }
+
+
+        /* =========================
+           BUTTONS
+        ========================= */
+
+        .hero-buttons {
+            margin-top: 38px;
+
+            display: flex;
+
+            justify-content: center;
+
+            gap: 14px;
+        }
+
+        .primary-button,
+        .secondary-button {
+
+            padding: 13px 21px;
+
+            border-radius: 4px;
+
+            text-decoration: none;
+
+            font-size: 14px;
+
+            transition: 0.2s ease;
+        }
+
+        .primary-button {
+            background: #d88ba5;
+
+            color: #21141a;
+        }
+
+        .primary-button:hover {
+            background: #e2a2b9;
+
+            transform: translateY(-2px);
+        }
+
+        .secondary-button {
+            border: 1px solid rgba(233,184,200,0.25);
+
+            color: #d8cbd0;
+
+            background: rgba(255,255,255,0.025);
+        }
+
+        .secondary-button:hover {
+            border-color: rgba(233,184,200,0.45);
+
+            color: #f0b8ca;
+        }
+
+
+        /* =========================
+           SECTION HEADER
+        ========================= */
+
+        .section-header {
+            margin-bottom: 28px;
+        }
+
+        .section-label {
+            color: #d88ba5;
+
+            font-size: 11px;
+
+            letter-spacing: 2.5px;
+
+            text-transform: uppercase;
+
+            margin-bottom: 10px;
+        }
+
+        .section-header h2 {
+            font-family: 'Playfair Display', serif;
+
+            font-size: 32px;
+
+            font-weight: 500;
+
+            margin-bottom: 8px;
+        }
+
+        .section-header p {
+            color: #91828a;
+
+            font-size: 14px;
+        }
+
+
+        /* =========================
+           EXPLORE GRID
+        ========================= */
+
+        .cards {
+            display: grid;
+
+            grid-template-columns: repeat(2, 1fr);
+
+            gap: 18px;
+
+            padding-bottom: 85px;
+        }
+
+        .card {
+
+            position: relative;
+
+            padding: 30px;
+
+            min-height: 245px;
+
+            background: #211620;
+
+            border: 1px solid rgba(233,184,200,0.12);
+
+            border-radius: 5px;
+
+            overflow: hidden;
+
+            transition:
+                    transform 0.25s ease,
+                    border-color 0.25s ease,
+                    background 0.25s ease;
+        }
+
+        .card::after {
+
+            content: "";
+
+            position: absolute;
+
+            width: 170px;
+            height: 170px;
+
+            border-radius: 50%;
+
+            background: rgba(216,139,165,0.08);
+
+            filter: blur(55px);
+
+            right: -80px;
+            top: -80px;
+
+            pointer-events: none;
+        }
+
+        .card:hover {
+
+            transform: translateY(-4px);
+
+            border-color: rgba(233,184,200,0.30);
+
+            background: #271b23;
+        }
+
+
+        /* =========================
+           CARD ICON
+        ========================= */
+
+        .icon {
+
+            font-size: 31px;
+
+            margin-bottom: 20px;
+
+            position: relative;
+
+            z-index: 1;
+        }
+
+
+        /* =========================
+           CARD CONTENT
+        ========================= */
+
+        .card h3 {
+
+            font-family: 'Playfair Display', serif;
+
+            font-size: 22px;
+
+            font-weight: 500;
+
+            color: #f5e8ed;
+
+            margin-bottom: 12px;
+
+            position: relative;
+
+            z-index: 1;
+        }
+
+        .card p {
+
+            color: #a99aa2;
+
+            font-size: 14px;
+
+            line-height: 1.7;
+
+            max-width: 470px;
+
+            margin-bottom: 22px;
+
+            position: relative;
+
+            z-index: 1;
+        }
+
+
+        /* =========================
+           CARD BUTTON
+        ========================= */
+
+        .card-button {
+
+            display: inline-block;
+
+            color: #d88ba5;
+
+            text-decoration: none;
+
+            font-size: 13px;
+
+            border-bottom: 1px solid rgba(216,139,165,0.35);
+
+            padding-bottom: 3px;
+
+            transition: 0.2s ease;
+
+            position: relative;
+
+            z-index: 1;
+        }
+
+        .card-button:hover {
+
+            color: #f0b8ca;
+
+            border-color: #f0b8ca;
+        }
+
+
+        /* =========================
+           PROJECT INFO
+        ========================= */
+
+        .info-section {
+
+            display: grid;
+
+            grid-template-columns: repeat(3, 1fr);
+
+            border-top: 1px solid rgba(233,184,200,0.12);
+
+            border-bottom: 1px solid rgba(233,184,200,0.12);
+
+            margin-bottom: 75px;
+        }
+
+        .info-box {
+
+            padding: 30px 20px;
+
+            text-align: center;
+
+            border-right: 1px solid rgba(233,184,200,0.10);
+        }
+
+        .info-box:last-child {
+            border-right: none;
+        }
+
+        .info-box .number {
+
+            font-family: 'Playfair Display', serif;
+
+            font-size: 28px;
+
+            color: #e2a2b9;
+
+            margin-bottom: 7px;
+        }
+
+        .info-box p {
+
+            color: #81727a;
+
+            font-size: 12px;
+
+            letter-spacing: 0.5px;
+        }
+
+
+        /* =========================
+           FOOTER
+        ========================= */
+
+        footer {
+
+            border-top: 1px solid rgba(233,184,200,0.10);
+
+            padding: 28px 0;
+
+            text-align: center;
+
+            color: #71636b;
+
+            font-size: 12px;
+        }
+
+        footer span {
+            color: #d88ba5;
+        }
+
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 800px) {
+
+            .nav-links {
+                display: none;
+            }
+
+            .hero {
+                padding-top: 75px;
+                padding-bottom: 80px;
+            }
+
+            .hero h1 {
+                font-size: 50px;
+            }
+
+            .hero p {
+                font-size: 15px;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+
+                align-items: center;
+            }
+
+            .primary-button,
+            .secondary-button {
+                width: fit-content;
+            }
+
+            .cards {
+                grid-template-columns: 1fr;
+            }
+
+            .info-section {
+                grid-template-columns: 1fr;
+            }
+
+            .info-box {
+                border-right: none;
+
+                border-bottom: 1px solid rgba(233,184,200,0.10);
+            }
+
+            .info-box:last-child {
+                border-bottom: none;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<div class="container">
+
+
+    <!-- =========================
+         NAVIGATION
+    ========================== -->
+
+    <nav>
+
+        <div class="logo">
+            Space2026
+        </div>
+
+        <div class="nav-links">
+
+            <a href="/">
+                Home
+            </a>
+
+            <a href="/apod">
+                APOD
+            </a>
+
+            <a href="/asteroids">
+                Asteroids
+            </a>
+
+            <a href="/images">
+                NASA Images
+            </a>
+
+            <a href="/solar-flares">
+                Solar Activity
+            </a>
+
+            <a href="/spacex">
+                SpaceX
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <!-- =========================
+         HERO
+    ========================== -->
+
+    <section class="hero">
+
+        <div class="eyebrow">
+            NASA DATA · SPACE EXPLORATION
+        </div>
+
+        <h1>
+            Explore the
+            <span>Universe.</span>
+        </h1>
+
+        <p>
+            A small window into the cosmos.
+            Discover astronomical images, track near-Earth
+            asteroids, explore NASA's image library, observe
+            solar activity, and follow SpaceX missions.
+        </p>
+
+        <div class="hero-buttons">
+
+            <a href="/apod"
+               class="primary-button">
+
+                Discover Today's Space →
+
+            </a>
+
+            <a href="/asteroids"
+               class="secondary-button">
+
+                Track Asteroids
+
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         EXPLORE
+    ========================== -->
+
+    <section>
+
+        <div class="section-header">
+
+            <div class="section-label">
+                Explore
+            </div>
+
+            <h2>
+                The universe, one section at a time.
+            </h2>
+
+            <p>
+                Choose a subject and start exploring space data.
+            </p>
+
+        </div>
+
+
+        <div class="cards">
+
+
+            <!-- APOD -->
+
+            <div class="card">
+
+                <div class="icon">
+                    🌌
+                </div>
+
+                <h3>
+                    Astronomy Picture of the Day
+                </h3>
+
+                <p>
+                    Discover a different view of the universe each day
+                    and read the story behind the image.
+                </p>
+
+                <a href="/apod"
+                   class="card-button">
+
+                    Explore APOD →
+
+                </a>
+
+            </div>
+
+
+            <!-- ASTEROIDS -->
+
+            <div class="card">
+
+                <div class="icon">
+                    ☄️
+                </div>
+
+                <h3>
+                    Near-Earth Asteroids
+                </h3>
+
+                <p>
+                    Explore objects passing near Earth, including
+                    their size, velocity, approach date and hazard status.
+                </p>
+
+                <a href="/asteroids"
+                   class="card-button">
+
+                    Track Asteroids →
+
+                </a>
+
+            </div>
+
+
+            <!-- NASA IMAGES -->
+
+            <div class="card">
+
+                <div class="icon">
+                    🔭
+                </div>
+
+                <h3>
+                    NASA Image Library
+                </h3>
+
+                <p>
+                    Search NASA's collection of space imagery and
+                    discover galaxies, planets, missions and more.
+                </p>
+
+                <a href="/images"
+                   class="card-button">
+
+                    Search Images →
+
+                </a>
+
+            </div>
+
+
+            <!-- SOLAR ACTIVITY -->
+
+            <div class="card">
+
+                <div class="icon">
+                    ☀️
+                </div>
+
+                <h3>
+                    Solar Activity
+                </h3>
+
+                <p>
+                    Explore recorded solar flares and investigate
+                    activity happening on our closest star.
+                </p>
+
+                <a href="/solar-flares"
+                   class="card-button">
+
+                    View Activity →
+
+                </a>
+
+            </div>
+
+
+            <!-- SPACEX -->
+
+            <div class="card">
+
+                <div class="icon">
+                    🚀
+                </div>
+
+                <h3>
+                    SpaceX Launches
+                </h3>
+
+                <p>
+                    Explore SpaceX missions, launch vehicles,
+                    upcoming launches and historical missions
+                    through live launch data.
+                </p>
+
+                <a href="/spacex"
+                   class="card-button">
+
+                    Explore SpaceX →
+
+                </a>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         PROJECT INFO
+    ========================== -->
+
+    <section class="info-section">
+
+        <div class="info-box">
+
+            <div class="number">
+                NASA
+            </div>
+
+            <p>
+                Space data
+            </p>
+
+        </div>
+
+        <div class="info-box">
+
+            <div class="number">
+                5
+            </div>
+
+            <p>
+                Exploration tools
+            </p>
+
+        </div>
+
+        <div class="info-box">
+
+            <div class="number">
+                2026
+            </div>
+
+            <p>
+                Exploring beyond Earth
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================
+         FOOTER
+    ========================== -->
+
+    <footer>
+
+        Space2026 · Built with
+        <span>Spring Boot</span>
+        +
+        <span>Thymeleaf</span>
+        · Powered by NASA & Space Devs data
+
+    </footer>
+
+
+</div>
+
+</body>
+
+</html>

@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>APOD | Space2026</title>
+
+    <style>
+
+
+
+        html,
+body {
+    background: #160f18 !important;
+    color: #f8eef2;
+}
+        @import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Playfair+Display:wght@500;600&display=swap');
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: #160f18;
+            color: #f8eef2;
+            min-height: 100vh;
+        }
+
+        /* ---------- NAVBAR ---------- */
+
+        nav {
+            width: 100%;
+            padding: 24px 7%;
+
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            border-bottom: 1px solid rgba(233, 184, 200, 0.12);
+        }
+
+        .logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 25px;
+            color: #f0b8ca;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 28px;
+        }
+
+        nav a {
+            color: #b9a9b1;
+            text-decoration: none;
+            font-size: 14px;
+            transition: 0.2s ease;
+        }
+
+        nav a:hover {
+            color: #f0b8ca;
+        }
+
+
+        /* ---------- MAIN ---------- */
+
+        .container {
+            width: 86%;
+            max-width: 1050px;
+            margin: 70px auto 80px;
+        }
+
+
+        /* ---------- HEADER ---------- */
+
+        .eyebrow {
+            color: #d88ba5;
+            font-size: 12px;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 18px;
+        }
+
+        h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: clamp(38px, 6vw, 68px);
+            line-height: 1.08;
+            font-weight: 500;
+            max-width: 900px;
+            color: #f8eef2;
+        }
+
+        .date {
+            margin-top: 18px;
+            color: #9f8d96;
+            font-size: 14px;
+        }
+
+
+        /* ---------- IMAGE ---------- */
+
+        .image-container {
+            margin-top: 48px;
+            width: 100%;
+
+            background: #211620;
+
+            border: 1px solid rgba(233, 184, 200, 0.13);
+
+            border-radius: 4px;
+
+            overflow: hidden;
+
+            box-shadow:
+                    0 25px 70px rgba(0, 0, 0, 0.35);
+        }
+
+        .image-container img {
+            width: 100%;
+            max-height: 700px;
+
+            display: block;
+
+            object-fit: contain;
+
+            background: #0d090d;
+        }
+
+
+        /* ---------- VIDEO ---------- */
+
+        .video-container {
+            margin-top: 48px;
+            width: 100%;
+        }
+
+        .video-container iframe {
+            width: 100%;
+            height: 600px;
+
+            border: none;
+            border-radius: 4px;
+        }
+
+
+        /* ---------- EXPLANATION ---------- */
+
+        .content {
+            margin-top: 55px;
+
+            max-width: 850px;
+
+            border-top:
+                    1px solid rgba(233, 184, 200, 0.18);
+
+            padding-top: 32px;
+        }
+
+        .content h2 {
+            font-family: 'Playfair Display', serif;
+
+            font-size: 27px;
+
+            font-weight: 500;
+
+            color: #f0b8ca;
+
+            margin-bottom: 22px;
+        }
+
+        .content p {
+            color: #cbbdc3;
+
+            font-size: 16px;
+
+            line-height: 1.9;
+        }
+
+        .content a {
+            color: #e2a2b9;
+
+            text-decoration: none;
+
+            border-bottom:
+                    1px solid rgba(226, 162, 185, 0.4);
+        }
+
+        .content a:hover {
+            color: #f3c4d5;
+        }
+
+
+        /* ---------- BACK ---------- */
+
+        .back {
+            display: inline-block;
+
+            margin-top: 50px;
+
+            color: #d88ba5;
+
+            text-decoration: none;
+
+            font-size: 14px;
+
+            transition: 0.2s ease;
+        }
+
+        .back:hover {
+            color: #f0b8ca;
+        }
+
+
+        /* ---------- FOOTER ---------- */
+
+        footer {
+            width: 86%;
+            max-width: 1050px;
+
+            margin: 0 auto 35px;
+
+            padding-top: 25px;
+
+            border-top:
+                    1px solid rgba(233, 184, 200, 0.10);
+
+            color: #76666e;
+
+            font-size: 12px;
+        }
+
+
+        /* ---------- MOBILE ---------- */
+
+        @media (max-width: 750px) {
+
+            nav {
+                padding: 20px 6%;
+            }
+
+            .nav-links {
+                gap: 14px;
+            }
+
+            .nav-links a:nth-child(n+4) {
+                display: none;
+            }
+
+            .container {
+                width: 88%;
+                margin-top: 50px;
+            }
+
+            h1 {
+                font-size: 40px;
+            }
+
+            .image-container {
+                margin-top: 35px;
+            }
+
+            .content {
+                margin-top: 40px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- ================= NAVBAR ================= -->
+
+<nav>
+
+    <div class="logo">
+        Space2026
+    </div>
+
+    <div class="nav-links">
+
+        <a href="/">
+            Home
+        </a>
+
+        <a href="/apod">
+            APOD
+        </a>
+
+        <a href="/asteroids">
+            Asteroids
+        </a>
+
+        <a href="/images">
+            Images
+        </a>
+
+        <a href="/solar-flares">
+            Solar Activity
+        </a>
+
+    </div>
+
+</nav>
+
+
+
+<!-- ================= MAIN ================= -->
+
+<div class="container">
+
+
+    <!-- HEADER -->
+
+    <div class="eyebrow">
+        Astronomy Picture of the Day
+    </div>
+
+
+    <h1 th:text="${apod.title}">
+        Astronomy Picture
+    </h1>
+
+
+    <div class="date"
+         th:text="${apod.date}">
+
+        2026-10-02
+
+    </div>
+
+
+
+    <!-- ================= IMAGE ================= -->
+
+    <div class="image-container"
+         th:if="${apod.mediaType == 'image'}">
+
+        <img
+                th:src="${apod.hdurl}"
+                th:alt="${apod.title}">
+
+    </div>
+
+
+
+    <!-- ================= VIDEO ================= -->
+
+    <div class="video-container"
+         th:if="${apod.mediaType == 'video'}">
+
+        <iframe
+                th:src="${apod.url}"
+                title="NASA Astronomy Picture of the Day">
+        </iframe>
+
+    </div>
+
+
+
+    <!-- ================= EXPLANATION ================= -->
+
+    <div class="content">
+
+        <h2>
+            About this image
+        </h2>
+
+
+        <!--
+
+            NASA sends the explanation as HTML.
+
+            th:utext renders that HTML instead of
+            displaying the HTML tags.
+
+        -->
+
+        <p th:utext="${apod.explanation}">
+
+            NASA explanation will appear here.
+
+        </p>
+
+    </div>
+
+
+
+    <!-- ================= BACK ================= -->
+
+    <a class="back"
+       href="/">
+
+        ← Back to Space2026
+
+    </a>
+
+</div>
+
+
+
+<!-- ================= FOOTER ================= -->
+
+<footer>
+
+    Space2026 · Exploring the universe, one picture at a time.
+
+</footer>
+
+
+</body>
+
+</html>

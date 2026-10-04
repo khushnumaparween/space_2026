@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title th:text="${launch.name + ' | Space2026'}">
+        Mission Data | Space2026
+    </title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/style.css}">
+
+    <style>
+
+        body {
+    margin: 0;
+    background: #160f18 !important;
+    color: #f8eef2;
+}
+
+        /* =========================================================
+           MISSION PAGE
+        ========================================================= */
+
+        .mission-page {
+            margin-top: 35px;
+            padding-bottom: 80px;
+        }
+
+
+        /* =========================================================
+           BACK
+        ========================================================= */
+
+        .mission-back {
+            display: inline-block;
+
+            color: #d88ba5;
+
+            text-decoration: none;
+
+            font-size: 14px;
+
+            transition: 0.2s ease;
+        }
+
+        .mission-back:hover {
+            color: #f0b8ca;
+        }
+
+
+        /* =========================================================
+           HERO
+        ========================================================= */
+
+        .mission-hero {
+            margin-top: 55px;
+
+            padding-bottom: 32px;
+
+            border-bottom:
+                1px solid rgba(233,184,200,0.18);
+        }
+
+        .mission-eyebrow {
+            color: #d88ba5;
+
+            font-size: 12px;
+
+            letter-spacing: 3px;
+
+            text-transform: uppercase;
+
+            margin-bottom: 18px;
+        }
+
+        .mission-hero h1 {
+            font-family: 'Playfair Display', serif;
+
+            font-size: clamp(38px, 6vw, 68px);
+
+            line-height: 1.08;
+
+            font-weight: 500;
+
+            color: #f8eef2;
+
+            max-width: 900px;
+        }
+
+        .mission-provider {
+            margin-top: 18px;
+
+            color: #9f8d96;
+
+            font-size: 14px;
+        }
+
+
+        /* =========================================================
+           IMAGE
+        ========================================================= */
+
+        .mission-visual {
+            margin-top: 45px;
+
+            width: 100%;
+
+            background: #211620;
+
+            border:
+                1px solid rgba(233,184,200,0.13);
+
+            border-radius: 4px;
+
+            overflow: hidden;
+        }
+
+        .mission-visual img {
+            width: 100%;
+
+            max-height: 650px;
+
+            display: block;
+
+            object-fit: contain;
+
+            background: #0d090d;
+        }
+
+        .no-image {
+            min-height: 400px;
+
+            display: flex;
+
+            flex-direction: column;
+
+            justify-content: center;
+
+            align-items: center;
+
+            text-align: center;
+        }
+
+        .no-image span {
+            color: #d88ba5;
+
+            font-family: 'Playfair Display', serif;
+
+            font-size: 28px;
+
+            margin-bottom: 10px;
+        }
+
+        .no-image p {
+            color: #81727a;
+
+            font-size: 12px;
+        }
+
+
+        /* =========================================================
+           STATUS
+        ========================================================= */
+
+        .mission-status {
+            display: flex;
+
+            align-items: center;
+
+            gap: 8px;
+
+            margin-top: 20px;
+
+            color: #a99aa2;
+
+            font-size: 10px;
+
+            letter-spacing: 1.5px;
+
+            text-transform: uppercase;
+        }
+
+        .mission-status-dot {
+            width: 6px;
+
+            height: 6px;
+
+            border-radius: 50%;
+
+            background: #d88ba5;
+
+            box-shadow:
+                0 0 8px rgba(216,139,165,0.4);
+        }
+
+
+        /* =========================================================
+           DATA
+        ========================================================= */
+
+        .mission-data {
+            display: grid;
+
+            grid-template-columns:
+                repeat(4, 1fr);
+
+            margin-top: 35px;
+
+            padding: 25px 0;
+
+            border-top:
+                1px solid rgba(233,184,200,0.12);
+
+            border-bottom:
+                1px solid rgba(233,184,200,0.12);
+        }
+
+        .data-item {
+            padding: 0 22px;
+
+            border-right:
+                1px solid rgba(233,184,200,0.10);
+        }
+
+        .data-item:first-child {
+            padding-left: 0;
+        }
+
+        .data-item:last-child {
+            border-right: none;
+        }
+
+        .data-label {
+            display: block;
+
+            color: #76666e;
+
+            font-size: 9px;
+
+            letter-spacing: 2px;
+
+            text-transform: uppercase;
+
+            margin-bottom: 8px;
+        }
+
+        .data-value {
+            display: block;
+
+            color: #e2a2b9;
+
+            font-family: 'Playfair Display', serif;
+
+            font-size: 17px;
+
+            line-height: 1.4;
+        }
+
+
+        /* =========================================================
+           CONTENT
+        ========================================================= */
+
+        .mission-content {
+            margin-top: 60px;
+
+            max-width: 850px;
+        }
+
+        .content-label {
+            color: #d88ba5;
+
+            font-size: 12px;
+
+            letter-spacing: 3px;
+
+            text-transform: uppercase;
+
+            margin-bottom: 18px;
+        }
+
+        .mission-content h2 {
+            font-family: 'Playfair Display', serif;
+
+            font-size: 28px;
+
+            font-weight: 500;
+
+            color: #f0b8ca;
+
+            margin-bottom: 22px;
+        }
+
+        .mission-description {
+            color: #cbbdc3;
+
+            font-size: 16px;
+
+            line-height: 1.9;
+        }
+
+        .mission-description.empty {
+            color: #81727a;
+        }
+
+
+        /* =========================================================
+           ROCKET
+        ========================================================= */
+
+        .rocket-section {
+            margin-top: 55px;
+
+            padding-top: 30px;
+
+            border-top:
+                1px solid rgba(233,184,200,0.18);
+        }
+
+        .rocket-section h2 {
+            font-family: 'Playfair Display', serif;
+
+            font-size: 27px;
+
+            font-weight: 500;
+
+            color: #f0b8ca;
+
+            margin-bottom: 18px;
+        }
+
+        .rocket-name {
+            color: #f8eef2;
+
+            font-family: 'Playfair Display', serif;
+
+            font-size: 22px;
+
+            margin-bottom: 7px;
+        }
+
+        .rocket-full-name {
+            color: #9f8d96;
+
+            font-size: 13px;
+        }
+
+
+        /* =========================================================
+           FOOTER
+        ========================================================= */
+
+        .mission-footer {
+            margin-top: 60px;
+
+            padding-top: 25px;
+
+            border-top:
+                1px solid rgba(233,184,200,0.10);
+
+            color: #76666e;
+
+            font-size: 12px;
+        }
+
+
+        /* =========================================================
+           MOBILE
+        ========================================================= */
+
+        @media (max-width: 750px) {
+
+            .mission-page {
+                margin-top: 25px;
+            }
+
+            .mission-hero {
+                margin-top: 45px;
+            }
+
+            .mission-hero h1 {
+                font-size: 40px;
+            }
+
+            .mission-visual {
+                margin-top: 35px;
+            }
+
+            .mission-visual img {
+                max-height: 400px;
+            }
+
+            .no-image {
+                min-height: 280px;
+            }
+
+            .mission-data {
+                grid-template-columns: 1fr 1fr;
+
+                row-gap: 25px;
+            }
+
+            .data-item {
+                padding: 0 15px;
+            }
+
+            .data-item:first-child {
+                padding-left: 0;
+            }
+
+            .data-item:nth-child(2) {
+                border-right: none;
+            }
+
+            .data-item:nth-child(-n+2) {
+                padding-bottom: 20px;
+
+                border-bottom:
+                    1px solid rgba(233,184,200,0.10);
+            }
+
+            .mission-content {
+                margin-top: 45px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<main class="container mission-page">
+
+
+    <!-- =========================================================
+         BACK
+    ========================================================= -->
+
+    <a th:href="@{/spacex}"
+       class="mission-back">
+
+        ← Back to SpaceX launches
+
+    </a>
+
+
+    <!-- =========================================================
+         HERO
+    ========================================================= -->
+
+    <section class="mission-hero">
+
+        <p class="mission-eyebrow">
+            MISSION DATA
+        </p>
+
+        <h1 th:text="${launch.name}">
+            Mission Name
+        </h1>
+
+        <p class="mission-provider"
+           th:if="${launch.launchServiceProvider != null}"
+           th:text="${launch.launchServiceProvider.name}">
+            SpaceX
+        </p>
+
+    </section>
+
+
+    <!-- =========================================================
+         IMAGE
+    ========================================================= -->
+
+    <section class="mission-visual">
+
+        <img th:if="${launch.image != null
+                     and launch.image.imageUrl != null}"
+             th:src="${launch.image.imageUrl}"
+             th:alt="${launch.name}">
+
+        <div class="no-image"
+             th:if="${launch.image == null
+                     or launch.image.imageUrl == null}">
+
+            <span>
+                Mission Image
+            </span>
+
+            <p>
+                No mission image is available for this launch.
+            </p>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================================
+         STATUS
+    ========================================================= -->
+
+    <div class="mission-status"
+         th:if="${launch.status != null}">
+
+        <span class="mission-status-dot"></span>
+
+        <span th:text="${launch.status.name}">
+            Mission Status
+        </span>
+
+    </div>
+
+
+    <!-- =========================================================
+         MISSION DATA
+    ========================================================= -->
+
+    <section class="mission-data">
+
+
+        <div class="data-item">
+
+            <span class="data-label">
+                Launch Date
+            </span>
+
+            <span class="data-value"
+                  th:text="${launch.launchDate}">
+                —
+            </span>
+
+        </div>
+
+
+        <div class="data-item">
+
+            <span class="data-label">
+                Rocket
+            </span>
+
+            <span class="data-value"
+                  th:if="${launch.rocket != null
+                          and launch.rocket.configuration != null}"
+                  th:text="${launch.rocket.configuration.name}">
+                —
+            </span>
+
+        </div>
+
+
+        <div class="data-item">
+
+            <span class="data-label">
+                Mission Type
+            </span>
+
+            <span class="data-value"
+                  th:if="${launch.mission != null}"
+                  th:text="${launch.mission.type != null
+                          ? launch.mission.type
+                          : 'Unknown'}">
+                —
+            </span>
+
+        </div>
+
+
+        <div class="data-item">
+
+            <span class="data-label">
+                Provider
+            </span>
+
+            <span class="data-value"
+                  th:if="${launch.launchServiceProvider != null}"
+                  th:text="${launch.launchServiceProvider.name}">
+                —
+            </span>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================================
+         MISSION OVERVIEW
+    ========================================================= -->
+
+    <section class="mission-content">
+
+        <p class="content-label">
+            Mission Overview
+        </p>
+
+        <h2>
+            About this mission
+        </h2>
+
+        <p class="mission-description"
+           th:if="${launch.mission != null
+                   and launch.mission.description != null}"
+           th:text="${launch.mission.description}">
+        </p>
+
+        <p class="mission-description empty"
+           th:if="${launch.mission == null
+                   or launch.mission.description == null}">
+
+            No mission description is available for this launch.
+
+        </p>
+
+
+        <!-- =====================================================
+             LAUNCH VEHICLE
+        ===================================================== -->
+
+        <section class="rocket-section"
+                 th:if="${launch.rocket != null
+                         and launch.rocket.configuration != null}">
+
+            <h2>
+                Launch Vehicle
+            </h2>
+
+            <p class="rocket-name"
+               th:text="${launch.rocket.configuration.name}">
+                Falcon 9
+            </p>
+
+            <p class="rocket-full-name"
+               th:if="${launch.rocket.configuration.full_name != null}"
+               th:text="${launch.rocket.configuration.full_name}">
+                Falcon 9 Block 5
+            </p>
+
+        </section>
+
+    </section>
+
+
+    <!-- =========================================================
+         FOOTER
+    ========================================================= -->
+
+    <footer class="mission-footer">
+
+        Space2026 · SpaceX mission data powered by The Space Devs
+
+    </footer>
+
+
+</main>
+
+</body>
+
+</html>

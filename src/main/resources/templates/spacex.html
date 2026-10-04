@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>SpaceX | Space2026</title>
+
+    <link rel="stylesheet"
+          th:href="@{/css/style.css}">
+
+    <style>
+
+        body {
+    margin: 0;
+    background: #160f18 !important;
+    color: #f8eef2;
+}
+
+        /* =========================================================
+           SPACEX
+        ========================================================= */
+
+        .spacex-page {
+            margin-top: 70px;
+        }
+
+
+        /* =========================================================
+           HERO
+        ========================================================= */
+
+        .spacex-hero {
+            max-width: 850px;
+
+            padding-bottom: 42px;
+
+            border-bottom:
+                1px solid rgba(233,184,200,0.18);
+        }
+
+        .spacex-eyebrow {
+            color: #d88ba5;
+
+            font-size: 12px;
+
+            letter-spacing: 3px;
+
+            text-transform: uppercase;
+
+            margin-bottom: 18px;
+        }
+
+        .spacex-hero h1 {
+            font-family: 'Playfair Display', serif;
+
+            font-size: clamp(38px, 6vw, 68px);
+
+            line-height: 1.08;
+
+            font-weight: 500;
+
+            color: #f8eef2;
+
+            margin-bottom: 18px;
+        }
+
+        .spacex-hero h1 span {
+            color: #e2a2b9;
+        }
+
+        .spacex-intro {
+            max-width: 700px;
+
+            color: #cbbdc3;
+
+            font-size: 16px;
+
+            line-height: 1.9;
+        }
+
+
+        /* =========================================================
+           SMALL DATA LINE
+        ========================================================= */
+
+        .spacex-info {
+            display: flex;
+
+            gap: 28px;
+
+            margin-top: 22px;
+
+            color: #9f8d96;
+
+            font-size: 12px;
+        }
+
+        .spacex-info span {
+            position: relative;
+        }
+
+        .spacex-info span:not(:last-child)::after {
+            content: "·";
+
+            position: absolute;
+
+            right: -16px;
+
+            color: #5d4f55;
+        }
+
+
+        /* =========================================================
+           LAUNCH SECTION
+        ========================================================= */
+
+        .launch-section {
+            margin-top: 55px;
+        }
+
+        .section-label {
+            color: #d88ba5;
+
+            font-size: 12px;
+
+            letter-spacing: 3px;
+
+            text-transform: uppercase;
+
+            margin-bottom: 18px;
+        }
+
+        .launch-section h2 {
+            font-family: 'Playfair Display', serif;
+
+            font-size: 27px;
+
+            font-weight: 500;
+
+            color: #f0b8ca;
+
+            margin-bottom: 25px;
+        }
+
+
+        /* =========================================================
+           LAUNCH LIST
+        ========================================================= */
+
+        .launch-list {
+            border-top:
+                1px solid rgba(233,184,200,0.18);
+        }
+
+        .launch-item {
+            display: grid;
+
+            grid-template-columns:
+                45px minmax(0, 1fr) 135px;
+
+            gap: 15px;
+
+            align-items: center;
+
+            padding: 25px 0;
+
+            border-bottom:
+                1px solid rgba(233,184,200,0.10);
+
+            transition: 0.2s ease;
+        }
+
+        .launch-item:hover {
+            background:
+                rgba(216,139,165,0.025);
+
+            padding-left: 8px;
+
+            padding-right: 8px;
+        }
+
+
+        /* =========================================================
+           NUMBER
+        ========================================================= */
+
+        .launch-number {
+            color: #76666e;
+
+            font-family: 'Playfair Display', serif;
+
+            font-size: 18px;
+        }
+
+
+        /* =========================================================
+           MISSION
+        ========================================================= */
+
+        .launch-main h3 {
+            font-family: 'Playfair Display', serif;
+
+            font-size: 20px;
+
+            font-weight: 500;
+
+            line-height: 1.3;
+
+            color: #f0e5e9;
+
+            margin-bottom: 8px;
+        }
+
+        .launch-meta {
+            display: flex;
+
+            flex-wrap: wrap;
+
+            gap: 16px;
+
+            color: #91828a;
+
+            font-size: 12px;
+        }
+
+        .launch-meta span {
+            position: relative;
+        }
+
+        .launch-meta span:not(:last-child)::after {
+            content: "·";
+
+            position: absolute;
+
+            right: -10px;
+
+            color: #5d4f55;
+        }
+
+
+        /* =========================================================
+           STATUS
+        ========================================================= */
+
+        .launch-status {
+            display: flex;
+
+            align-items: center;
+
+            gap: 7px;
+
+            margin-top: 10px;
+
+            color: #a99aa2;
+
+            font-size: 10px;
+
+            letter-spacing: 1px;
+
+            text-transform: uppercase;
+        }
+
+        .status-dot {
+            width: 6px;
+
+            height: 6px;
+
+            border-radius: 50%;
+
+            background: #d88ba5;
+
+            box-shadow:
+                0 0 8px rgba(216,139,165,0.35);
+        }
+
+
+        /* =========================================================
+           MISSION LINK
+        ========================================================= */
+
+        .launch-details {
+            display: inline-block;
+
+            margin-top: 10px;
+
+            color: #d88ba5;
+
+            text-decoration: none;
+
+            font-size: 11px;
+
+            border-bottom:
+                1px solid rgba(216,139,165,0.35);
+
+            padding-bottom: 2px;
+
+            transition: 0.2s ease;
+        }
+
+        .launch-details:hover {
+            color: #f0b8ca;
+
+            border-color: #f0b8ca;
+        }
+
+
+        /* =========================================================
+           DATE
+        ========================================================= */
+
+        .launch-date {
+            color: #9f8d96;
+
+            font-size: 11px;
+
+            line-height: 1.7;
+
+            white-space: normal;
+        }
+
+
+        /* =========================================================
+           EMPTY STATE
+        ========================================================= */
+
+        .empty-state {
+            padding: 55px 20px;
+
+            border-bottom:
+                1px solid rgba(233,184,200,0.10);
+
+            text-align: center;
+        }
+
+        .empty-state h3 {
+            font-family: 'Playfair Display', serif;
+
+            font-size: 25px;
+
+            font-weight: 500;
+
+            color: #e2a2b9;
+
+            margin-bottom: 10px;
+        }
+
+        .empty-state p {
+            color: #81727a;
+
+            font-size: 13px;
+        }
+
+
+        /* =========================================================
+           PAGINATION
+        ========================================================= */
+
+        .pagination {
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-top: 32px;
+
+            padding-top: 22px;
+
+            border-top:
+                1px solid rgba(233,184,200,0.10);
+        }
+
+        .page-button {
+            color: #d88ba5;
+
+            text-decoration: none;
+
+            font-size: 12px;
+
+            transition: 0.2s ease;
+        }
+
+        .page-button:hover {
+            color: #f0b8ca;
+        }
+
+        .page-number {
+            color: #81727a;
+
+            font-size: 11px;
+        }
+
+        .page-number strong {
+            color: #e2a2b9;
+
+            font-weight: 500;
+        }
+
+
+        /* =========================================================
+           FOOTER
+        ========================================================= */
+
+        .spacex-footer {
+            margin-top: 55px;
+
+            padding-top: 25px;
+
+            border-top:
+                1px solid rgba(233,184,200,0.10);
+
+            color: #76666e;
+
+            font-size: 12px;
+        }
+
+
+        /* =========================================================
+           MOBILE
+        ========================================================= */
+
+        @media (max-width: 750px) {
+
+            .spacex-page {
+                margin-top: 50px;
+            }
+
+            .spacex-hero {
+                padding-bottom: 35px;
+            }
+
+            .spacex-hero h1 {
+                font-size: 40px;
+            }
+
+            .spacex-info {
+                gap: 18px;
+
+                flex-wrap: wrap;
+            }
+
+            .launch-item {
+                grid-template-columns:
+                    35px minmax(0, 1fr);
+
+                gap: 10px;
+
+                padding: 23px 0;
+            }
+
+            .launch-date {
+                grid-column: 2;
+
+                margin-top: -3px;
+            }
+
+            .pagination {
+                margin-top: 25px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+<main class="container spacex-page">
+
+
+    <!-- =========================================================
+         HERO
+    ========================================================= -->
+
+    <section class="spacex-hero">
+
+        <p class="spacex-eyebrow">
+            SPACE EXPLORATION
+        </p>
+
+        <h1>
+            SpaceX
+            <span>Launches.</span>
+        </h1>
+
+        <p class="spacex-intro">
+            Explore SpaceX missions, launch vehicles and
+            launch history through spaceflight data.
+        </p>
+
+        <div class="spacex-info">
+
+            <span>
+                <strong th:text="${count}">
+                    0
+                </strong>
+                launches
+            </span>
+
+            <span>
+                Page
+                <strong th:text="${page}">
+                    1
+                </strong>
+            </span>
+
+            <span>
+                Space2026
+            </span>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================================
+         LAUNCH DATABASE
+    ========================================================= -->
+
+    <section class="launch-section">
+
+        <p class="section-label">
+            Launch Database
+        </p>
+
+        <h2>
+            Recent Missions
+        </h2>
+
+
+        <div class="launch-list">
+
+
+            <!-- =================================================
+                 LAUNCH
+            ================================================= -->
+
+            <article class="launch-item"
+                     th:each="launch, stat : ${launches}">
+
+
+                <!-- NUMBER -->
+
+                <div class="launch-number"
+                     th:text="${stat.count < 10
+                              ? '0' + stat.count
+                              : stat.count}">
+
+                    01
+
+                </div>
+
+
+                <!-- MAIN -->
+
+                <div class="launch-main">
+
+                    <h3 th:text="${launch.name}">
+                        Mission Name
+                    </h3>
+
+
+                    <div class="launch-meta">
+
+                        <span th:if="${launch.rocket != null
+                                      and launch.rocket.configuration != null}"
+                              th:text="${launch.rocket.configuration.name}">
+                            Rocket
+                        </span>
+
+
+                        <span th:if="${launch.launchServiceProvider != null}"
+                              th:text="${launch.launchServiceProvider.name}">
+                            SpaceX
+                        </span>
+
+
+                        <span th:if="${launch.mission != null
+                                      and launch.mission.type != null}"
+                              th:text="${launch.mission.type}">
+                            Mission Type
+                        </span>
+
+                    </div>
+
+
+                    <div class="launch-status">
+
+                        <span class="status-dot"></span>
+
+                        <span th:text="${launch.status != null
+                                        ? launch.status.name
+                                        : 'Unknown'}">
+
+                            Unknown
+
+                        </span>
+
+                    </div>
+
+
+                    <a class="launch-details"
+                       th:href="@{/spacex/mission/{id}(id=${launch.id})}">
+
+                        View mission data →
+
+                    </a>
+
+                </div>
+
+
+                <!-- DATE -->
+
+                <div class="launch-date"
+                     th:text="${launch.launchDate}">
+
+                    Launch time
+
+                </div>
+
+            </article>
+
+
+            <!-- =================================================
+                 EMPTY
+            ================================================= -->
+
+            <div class="empty-state"
+                 th:if="${#lists.isEmpty(launches)}">
+
+                <h3>
+                    No launch data
+                </h3>
+
+                <p>
+                    No SpaceX launches are currently available.
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- =====================================================
+             PAGINATION
+        ===================================================== -->
+
+        <div class="pagination">
+
+            <a th:if="${previous != null}"
+               th:href="@{/spacex(
+                            page=${page - 1},
+                            size=${size}
+                         )}"
+               class="page-button">
+
+                ← Previous
+
+            </a>
+
+
+            <span class="page-number">
+
+                Page
+
+                <strong th:text="${page}">
+                    1
+                </strong>
+
+            </span>
+
+
+            <a th:if="${next != null}"
+               th:href="@{/spacex(
+                            page=${page + 1},
+                            size=${size}
+                         )}"
+               class="page-button">
+
+                Next →
+
+            </a>
+
+        </div>
+
+    </section>
+
+
+    <!-- =========================================================
+         FOOTER
+    ========================================================= -->
+
+    <footer class="spacex-footer">
+
+        Space2026 · SpaceX launch data powered by The Space Devs
+
+    </footer>
+
+
+</main>
+
+</body>
+
+</html>
